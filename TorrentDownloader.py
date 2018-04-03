@@ -7,16 +7,26 @@ import time
 import sys
 
 def main():
-	url = sys.argv[1]
-	episodeName = sys.argv[2]
-	downloadDirectory = sys.argv[3]
-	magnetLink = returnDownloadLink(url, episodeName)
-	#downloadDirectory = "/home/aravindh/Videos/TVSeries/SiliconValley/Season5"	#downloadDirectory 
-	downloadTorrent(magnetLink, downloadDirectory)	
+
+	season = "05"	#season number 
+	f = open("episode.txt", "r+")	#opening the file that contains previous episode downloaded
+	prevEpisodeDownloaded = eval(f.readLine().strip())
+	currentEpisode = prevEpisodeDownloaded + 1
+	if currentEpisode < 10:
+		episodeName = "S" + season + "E0" + str(currentEpisode)
+	else:
+		episodeName = "S" + season + "E" + str(currentEpisode)
+	url = "http://thetvtorrents.com/show/silicon-valley"	#url to scrape from
+	downloadDirectory = "/home/aravindh/Videos/TVSeries/SiliconValley/Season5"	#downloadDirectory
+	magnetLink = returnDownloadLink(url, episodeName) 
+	if downloadTorrent(magnetLink, downloadDirectory):
+		prevEpisodeDownloaded = currentEpisode	#prev episode set to current episode
+		f.truncate()	#delete contents of the file
+		f.write(str(prevEpisodeDownloaded)) #writing back prev downloaded episode
+	f.close()	#close the file	
 	
 	
 def returnDownloadLink(url, episodeName):
-	#url= "http://thetvtorrents.com/show/silicon-valley"	#url from which we download torrent/magnet link
 	hdr = {'User-Agent': 'Mozilla/5.0'}
 	req = Request(url, headers=hdr)
 	page = urlopen(req)
@@ -28,7 +38,7 @@ def returnDownloadLink(url, episodeName):
 			
     	
 def downloadTorrent(magnetLink, downloadDirectory):
-	command = ["transmission-cli", "-w", downloadDirectory, magnetLink]
+	command = ["transmission-cli -f killTransmission.sh -w", downloadDirectory, magnetLink]
 	try:
 		check_call(command) #calling the command line to download torrent
 	except CalledProcessError:
@@ -36,6 +46,7 @@ def downloadTorrent(magnetLink, downloadDirectory):
 		downloadTorrent(magnetLink, downloadDirectory)	#call the function again
 	else:
 		call(["notify-send", "Silicon valley new episode downloaded!"])	#notify the user
+	return 1	#return value of 1 in case of success	
 				
 	
 main()	#calling main function
