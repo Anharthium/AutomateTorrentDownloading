@@ -8,7 +8,7 @@ import sys
 
 def main():
 	season = "05"	#season number 
-	f = open("episode.txt", "r")	#opening the file that contains previous episode downloaded
+	f = open("LastEpisodeDownloaded.txt", "r")	#opening the file that contains previous episode downloaded
 	prevEpisodeDownloaded = eval(f.read().strip())
 	f.close()	#close the file
 	currentEpisode = prevEpisodeDownloaded + 1
@@ -17,15 +17,17 @@ def main():
 	else:
 		episodeName = "S" + season + "E" + str(currentEpisode)
 	url = "http://thetvtorrents.com/show/silicon-valley"	#url to scrape from
-	downloadDirectory = "/home/albj"	#downloadDirectory
+	downloadDirectory = "/home/aravindh/Videos/TVSeries/SiliconValley/Season5"	#downloadDirectory
 	magnetLink = returnDownloadLink(url, episodeName)
+	if (magnetLink == None):
+		sys.exit("Episode not yet available")
 	downloadTorrent(magnetLink, downloadDirectory)
 	prevEpisodeDownloaded = currentEpisode	#prev episode set to current episode
-	f = open("episode.txt", "w")
+	f = open("LastEpisodeDownloaded.txt", "w")
 	f.truncate()	#delete contents of the file
 	f.write(str(prevEpisodeDownloaded)) #writing back prev downloaded episode
-
 	f.close()	#close the file	
+	sys.exit(0)	#return 0 on successful completion of program
 	
 	
 def returnDownloadLink(url, episodeName):
@@ -40,7 +42,7 @@ def returnDownloadLink(url, episodeName):
 			
     	
 def downloadTorrent(magnetLink, downloadDirectory):
-	command = ["transmission-cli", "-f", "killTransmission.sh", "-w", downloadDirectory, magnetLink]
+	command = ["transmission-cli", "-f", """/home/aravindh/pythonPrograms/AutomateTorrentDownloading/KillTransmission.sh""", "-w", downloadDirectory, magnetLink]
 	call(command) #calling the command line to download torrent
 	call(["notify-send", "Silicon valley new episode downloaded!"])	#notify the user	
 				
