@@ -40,8 +40,8 @@ def returnDownloadLink(url, episodeName):
 			
     	
 def downloadTorrent(magnetLink, downloadDirectory):
-	command = ["xdg-open", magnetLink]
-	call(command, stdout=PIPE, stderr=PIPE) #calling the command line to download torrent
+	command = ["transmission-cli", "-f", "killTransmission.sh", "-w", downloadDirectory, magnetLink]
+	call(command) #calling the command line to download torrent
 	call(["notify-send", "Silicon valley new episode downloaded!"])	#notify the user	
 				
 	
