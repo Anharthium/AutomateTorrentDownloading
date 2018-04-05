@@ -18,7 +18,7 @@
 
 5) If your torrent is not downloading, open transmission. Under Edit -> Preferences -> Network -> select pick random port every time it is started.
 
-6) This is a small script which you could break easily. So feel free to modify it according to your use or use the idea to design your own. 
+6) This is a small script which could break easily. So feel free to modify it according to your use or use the idea to design your own. 
 
 7) I will try to make it as useful as possible by adding a number of functionalities. So feel free to contribute.
 	
