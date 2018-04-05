@@ -1,5 +1,5 @@
 # AutomateTorrentDownloading
-1) This is a small script to automate downloading of your favorite TV shoes through torrent. Supported for Python3 only. Tested on Ubuntu 16.04 only.
+1) This is a small script to automate downloading of your favorite TV shoes through torrent. Supported for Python3 only. Tested on Ubuntu 16.04 only. But it should work on most linux flavors with minor changes.
 
 2) Dependencies
 	a) bs4 should be installed for python3.
